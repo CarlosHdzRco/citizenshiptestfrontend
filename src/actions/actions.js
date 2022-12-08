@@ -16,3 +16,17 @@ export const setHomeState = (homeState) => {
         homeState: homeState
     }
 }
+
+export const setSenators = (senatorsObj) => {
+    return {
+        type: 'SET_SENATORS',
+        senatorsObj: senatorsObj
+    }
+}
+
+export const setHouse = (houseStr) => {
+    return {
+        type: 'SET_HOUSE',
+        houseStr: houseStr
+    }
+}

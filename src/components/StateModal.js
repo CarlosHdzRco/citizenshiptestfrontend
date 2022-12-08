@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Button, Modal } from 'semantic-ui-react'
 import { useDispatch, useSelector } from 'react-redux'
-import { openModal, closeModal, setHomeState } from '../actions/actions'
+import { openModal, closeModal, setHomeState, setSenators, setHouse } from '../actions/actions'
 import { faker } from '@faker-js/faker'
 import _ from 'lodash'
 import { Dropdown } from 'semantic-ui-react'
@@ -15,11 +15,18 @@ const stateOptions = _.map(addressDefinitions.state, (state, index) => ({
 }))
 
 
+
 function StateModal() {
 
   const modalOpen = useSelector((state) => state.modalOpen)
   const homeState = useSelector((state) => state.homeState)
-  const [error, setError] = useState('')
+  const houseStr = useSelector((state) => state.houseStr)
+
+  const [stateError, setStateError] = useState(false)
+  const [districtError, setDistrictError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const [districtOptions, setDistrictOptions] =useState([])
 
   const dispatch = useDispatch()
 
@@ -27,18 +34,67 @@ function StateModal() {
     if(homeState === '') {
         dispatch(openModal())
     }
+
   }, [])
 
-  const checkSelections = () => {
-    if(homeState === '') {
-        setError('Please make a selection.')
+  const fillDistrictOptions = async (data) => {
+    // console.log('in apicalls func')
+    dispatch(setHomeState(data.value))
+    
+    await fetch(`https://api.propublica.org/congress/v1/members/house/${data.value}/current.json`, {
+        mode: 'cors',
+        headers: {
+        'X-API-Key': process.env.REACT_APP_PROPUBLICA_API_KEY
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // console.log(data.results)
+
+        var districtOptionsVar = data.results.map((resultsObj) => {
+            return {key: 'District ' + resultsObj.district + ':  ' + resultsObj.name, text: 'District ' + resultsObj.district + ':  ' + resultsObj.name, value: 'District ' + resultsObj.district + ':  ' + resultsObj.name}
+        })
+        setDistrictOptions(districtOptionsVar)
+    })
+    
+  }
+
+
+
+const checkSelections = async () => {
+
+    if(homeState === '' && houseStr === ''){
+        setStateError(true)
+        setDistrictError(true)
+        setErrorMessage('Please Make a Selection')
+    }
+    else if(homeState === ''){
+        setStateError(true)
+        setErrorMessage('Please Make a Selection')
+    }
+    else if(houseStr === ''){
+        setDistrictError(true)
+        setErrorMessage('Please Make a Selection')
     }
     else {
-        dispatch(closeModal())
-        setError('')
+        await fetch(`https://api.propublica.org/congress/v1/members/senate/${homeState}/current.json`, {
+            mode: 'cors',
+            headers: {
+            'X-API-Key': process.env.REACT_APP_PROPUBLICA_API_KEY
+        }
+        })
+        .then(response => response.json())
+        .then(data => {
+            dispatch(setSenators(data.results))
+            // console.log(data)
+            dispatch(closeModal())
+        })
     }
-  }
+    
+}
   
+
+
 
   return (
     <div>
@@ -51,13 +107,17 @@ function StateModal() {
       >
         <Modal.Header>Select Your State and District</Modal.Header>
         <Modal.Content>
-            <Dropdown placeholder='State' selection options={stateOptions} 
-            onChange={(e, data)=>{setError('') 
-                dispatch(setHomeState(data.value))}
-            } />
+            <h5>1. Select State</h5>
+            <Dropdown error={stateError} placeholder='State' selection options={stateOptions}
+            onChange={(e, data)=> fillDistrictOptions(data)} />
+
+            <h5>2. Select District</h5>
+            <Dropdown error={districtError} placeholder='District' selection options={districtOptions} 
+            onChange={(e, data)=> dispatch(setHouse(data.value))} />
+            <a href='https://www.house.gov/representatives/find-your-representative'> Find Your District</a>
         </Modal.Content>
         <Modal.Actions>
-            <span id='error'>{error}</span>
+            <span id='error'>{errorMessage}</span>
           <Button positive onClick={() => checkSelections()}>
             Submit
           </Button>
