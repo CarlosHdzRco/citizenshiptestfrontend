@@ -24,9 +24,32 @@ export const setSenators = (senatorsObj) => {
     }
 }
 
+export const setExamInfo = (examInfo) => {
+    return {
+        type: 'SET_EXAM_INFO',
+        examInfo: examInfo
+    }
+}
+
 export const setHouse = (houseStr) => {
     return {
         type: 'SET_HOUSE',
         houseStr: houseStr
     }
 }
+
+export const setCategory = (category) => {
+    console.log('action: ', category)
+    return {
+        type: 'SET_CATEGORY',
+        category: category
+    }
+}
+
+export const setSubCategory = (subcategory) => {
+    return {
+        type: 'SET_SUBCATEGORY',
+        subcategory: subcategory
+    }
+}
+

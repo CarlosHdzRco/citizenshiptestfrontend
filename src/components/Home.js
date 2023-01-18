@@ -16,9 +16,6 @@ function Home() {
       {senatorsObj.map(senatorObj => {
         return <h1 key={senatorObj.name}>{senatorObj.name}</h1>
       })}
-      
-      
-
     </>
     
   )

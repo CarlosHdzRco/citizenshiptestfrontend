@@ -1,0 +1,43 @@
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #AAB6C5;
+    padding-top: 30px;
+}
+
+.cardContainer {
+    display: flex;
+}
+
+.card {
+    width: 300px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.soundImg {
+    height: 20px;
+    width: 20px;
+    background-color: white;
+}
+
+.soundButton {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.descriptor {
+    position: fixed;
+    left: 30px;
+    top: 30px;
+}
+
+.cardText {
+    padding-left: 60px;
+    padding-right: 60px;
+    text-align: center;
+
+}

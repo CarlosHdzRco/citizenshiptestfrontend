@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Menu } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import StateModal from './StateModal'
+import '../css/Navbar.css'
 
 
 function Navbar({children}) {
