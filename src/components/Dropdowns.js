@@ -38,7 +38,7 @@ function Dropdowns() {
 
 
     useEffect(() => {
-        console.log('in use effect')
+        // console.log('in use effect')
         if(category === 'American Government') {
             setSubCategories([
                 {
@@ -102,7 +102,7 @@ function Dropdowns() {
     }, [category])
 
     const changeCategory = (e) => {
-        console.log(e)
+        // console.log(e)
         dispatch(setCategory(e.target.innerText))
         dispatch(setSubCategory(''))
     }

@@ -53,3 +53,14 @@ export const setSubCategory = (subcategory) => {
     }
 }
 
+export const openStartModal = () => {
+    return {
+        type: 'OPEN_START_MODAL'
+    }
+}
+
+export const closeStartModal = () => {
+    return {
+        type: 'CLOSE_START_MODAL'
+    }
+}

@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #AAB6C5;
+    background-color: #1C3879;
     padding-top: 30px;
 }
 
@@ -16,6 +16,7 @@
 
 .buttons {
     margin-top: 20px;
+    margin-bottom: 100px;;
 }
 
 .soundImg {
@@ -39,5 +40,31 @@
     padding-left: 60px;
     padding-right: 60px;
     text-align: center;
+    font-family: 'Roboto', sans-serif !important;
+}
 
+h5 {
+    font-family: 'Roboto', sans-serif;
+}
+
+.cardsoundtransContainer {
+    display: flex;
+    padding-left: 95px;
+}
+
+.soundtransContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.translateButton {
+    font-family: 'Roboto', sans-serif;
+    /* background-image: linear-gradient( 135deg, #607EAA 10%, #EAE3D2 100%); */
+    border-radius: 5px;
+    margin-top: 3px !important;
+
+}
+
+.ui.button {
+    padding: .4em !important;
 }

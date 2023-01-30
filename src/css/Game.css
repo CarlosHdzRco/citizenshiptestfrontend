@@ -1,0 +1,80 @@
+.pageContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 80px;
+    padding-bottom: 200px;
+
+}
+
+.gameContainer {
+    width: 602px;
+    align-self: center;
+    font-size: larger;
+    margin-top: 0 !important;
+}
+
+.ui.button.gameButton {
+    margin-bottom: 20px;
+    height: 80px;
+}
+
+.ui.button {
+    font-size: 1.4rem !important;
+    font-family: 'Roboto', sans-serif;
+}
+
+.questionCard {
+    width: 600px !important;
+    align-self: center;
+    font-size: 1.4rem !important;
+    margin: 0 !important;
+}
+
+.questionCounter {
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+.questionHeader {
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif !important;
+
+    
+}
+
+.ui.basic.blue.button {
+    background-color: white !important;
+}
+
+.ui.segment {
+    /* background-color: #1C3879 !important; */
+    background-image: linear-gradient( 135deg, #607EAA 10%, #EAE3D2 100%) !important;
+    border: 2px solid white !important;
+    border-radius: 0 !important;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: .5rem !important;
+    border-bottom-right-radius: .5rem !important;
+
+}
+
+.ui.card {
+    /* border-radius: 0 !important; */
+
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+}
+
+.icon {
+    align-self: initial;
+}
+
+.ui.basic.green.active.button.gameButton, .ui.basic.green.buttons.gameButton .active.button.gameButton {
+    background-color: white !important;
+}
+
+.ui.basic.blue.active.button.gameButton, .ui.basic.blue.buttons.gameButton .active.button.gameButton {
+    background-color: white !important;
+}

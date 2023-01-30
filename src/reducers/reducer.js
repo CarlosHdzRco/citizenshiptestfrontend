@@ -6,6 +6,8 @@ export const reducer = (state, action) => {
             senatorsObj: [],
             houseStr: '',
             modalOpen: false,
+            startModalOpen: false,
+            startedGame: false,
             examInfo: [],
             category: '',
             subcategory: ''
@@ -15,11 +17,13 @@ export const reducer = (state, action) => {
     switch(action.type) {
 
         case 'OPEN_MODAL':
+            // console.log('openmodal')
             return {
                 ...state,
                 modalOpen: true
             }
         case 'CLOSE_MODAL':
+            // console.log('closemodal')
             return {
                 ...state,
                 modalOpen: false
@@ -57,6 +61,19 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 subcategory: action.subcategory
+            }
+        case 'OPEN_START_MODAL':
+            // console.log('openstartmodal')
+            return {
+                ...state,
+                startModalOpen: true
+            }
+        case 'CLOSE_START_MODAL':
+            // console.log('closestartmodal')
+            return {
+                ...state,
+                startModalOpen: false,
+                startedGame: true
             }
 
         default:
