@@ -17,6 +17,13 @@ export const setHomeState = (homeState) => {
     }
 }
 
+export const setStateCapital = (capital) => {
+    return {
+        type: 'SET_STATE_CAPITAL',
+        stateCapital: capital
+    }
+}
+
 export const setSenators = (senatorsObj) => {
     return {
         type: 'SET_SENATORS',

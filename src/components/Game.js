@@ -8,11 +8,15 @@ import NextQuestionPortal from './NextQuestionPortal';
 import EndGameModal from './EndGameModal';
 import { stopGame } from '../actions/actions';
 
-
 function Game() {
 
   const examInfo = useSelector((state) => state.examInfo)
   const startedGame = useSelector((state) => state.startedGame)
+  const homeState = useSelector((state) => state.homeState)
+  const senatorsObj = useSelector((state) => state.senatorsObj)
+  const houseStr = useSelector((state) => state.houseStr)
+  const stateCapital = useSelector((state) => state.stateCapital)
+
 
   const [loaded,setLoaded] = useState(false)
   const [randQuestionNums, setRandQuestionNums] = useState([])    // holds random number from 0 - 99 to randomize ten questions
@@ -27,8 +31,7 @@ function Game() {
   const [isCorrect, setIsCorrect] = useState(true)                // if chosen answer is correct
 
   const [openPortal, setOpenPortal] = useState(false)             // open state for Next question portal at bottom of screen
-  const [openRestartModal, setOpenRestartModal] = useState(false)             // open state to open restart modal
-
+  const [openRestartModal, setOpenRestartModal] = useState(false) // open state to open restart modal
 
   const dispatch = useDispatch();
 
@@ -67,7 +70,7 @@ function Game() {
 
       // make sure question is not already chosen
       const result = randQuestionNumsArray.filter(num => num === randNum);
-      if(result.length === 0) {
+      if(result.length === 0 && data[randNum].question !== "Who is the Governor of your state now?") {
         randQuestionNumsArray = [...randQuestionNumsArray, randNum];
         i = i + 1;
       }
@@ -115,8 +118,27 @@ function Game() {
         }
       }
 
+      // get one of users senator if random question is "Who is one of your state's U.S. Senators now?"
+      if(data[randQuestionNumsArray[index]].question === "Who is one of your state's U.S. Senators now?") {
+        let randSenatorNum = Math.floor(Math.random() * 2);
+        setRandAnswers([{answer: senatorsObj[randSenatorNum].name, isCorrect: true}, ...randWrongAnsHolder])
+      }
+
+      // get users representative if random question is "Name your U.S. Representative."
+      else if(data[randQuestionNumsArray[index]].question === "Name your U.S. Representative.") {
+        let repNameTemp = houseStr
+        setRandAnswers([{answer: repNameTemp.substring(repNameTemp.indexOf(":") + 1), isCorrect: true}, ...randWrongAnsHolder])
+      }
+      
+      // get users state if random question is "What is the capital of your state?"
+      else if(data[randQuestionNumsArray[index]].question === "What is the capital of your state?") {
+        setRandAnswers([{answer: stateCapital , isCorrect: true}, ...randWrongAnsHolder])
+      }
+
       // add random answers to randanswers array state
-      setRandAnswers([{answer: data[randQuestionNumsArray[index]].answer[randCorrectAnsNum], isCorrect: true}, ...randWrongAnsHolder])
+      else {
+        setRandAnswers([{answer: data[randQuestionNumsArray[index]].answer[randCorrectAnsNum], isCorrect: true}, ...randWrongAnsHolder])
+      }
     }
 
     // question type is 2 so two correct answers are chosen and two wrong answers is chosen
@@ -186,10 +208,6 @@ function Game() {
 
   // check if button(answer) that is clicked is correct
   const checkAnswer = (num, e) => {
-
-    console.log(e)
-    console.log(e.target)
-    console.log(e.target.ariaPressed)
 
     // make sure button has not been pressed yet
     if(e.target.ariaPressed == "false") {
@@ -297,7 +315,7 @@ function Game() {
             <Card.Meta className='questionCounter' >Question {questionIndex + 1} of 10</Card.Meta>
             <Card.Header className='questionHeader'>{examInfo[randQuestionNums[questionIndex]].question}</Card.Header>
             
-            <Card.Description className='questionChecks' content= {correctWrongArray} key={[Math.floor(Math.random()), randAnswers[randAnswerNums[0]].answer, randAnswers[randAnswerNums[1]].answer, randAnswers[randAnswerNums[2]].answer, randAnswers[randAnswerNums[3]].answer]} />
+            <Card.Description className='questionChecks' content= {correctWrongArray} key={[Math.floor(Math.random()), randAnswers[randAnswerNums[0]].answer, Math.floor(Math.random()), randAnswers[randAnswerNums[1]].answer, randAnswers[randAnswerNums[2]].answer, randAnswers[randAnswerNums[3]].answer, Math.floor(Math.random())]} />
           </Card.Content>
         </Card>
 

@@ -3,6 +3,7 @@ export const reducer = (state, action) => {
     if(state === undefined){
         state = {
             homeState: '',
+            stateCapital: '',
             senatorsObj: [],
             houseStr: '',
             modalOpen: false,
@@ -33,6 +34,12 @@ export const reducer = (state, action) => {
                 ...state,
                 homeState: action.homeState
             }
+        case 'SET_STATE_CAPITAL':
+            return {
+                ...state,
+                stateCapital: action.stateCapital
+            }
+            
         case 'SET_SENATORS':
             // console.log(action.senatorsObj)
             return {

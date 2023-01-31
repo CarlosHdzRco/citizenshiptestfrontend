@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import { Button, Modal } from 'semantic-ui-react'
 import { useDispatch, useSelector } from 'react-redux'
-import { openModal, closeModal, setHomeState, setSenators, setHouse } from '../actions/actions'
+import { openModal, closeModal, setHomeState, setSenators, setHouse, setStateCapital } from '../actions/actions'
 import { faker } from '@faker-js/faker'
 import _ from 'lodash'
 import { Dropdown } from 'semantic-ui-react'
 import '../css/StateModal.css'
+
 
 const addressDefinitions = faker.definitions.address
 const stateOptions = _.map(addressDefinitions.state, (state, index) => ({
@@ -39,6 +40,7 @@ function StateModal() {
 
   const fillDistrictOptions = async (data) => {
     // console.log('in apicalls func')
+    console.log(data.value)
     dispatch(setHomeState(data.value))
     
     await fetch(`https://api.propublica.org/congress/v1/members/house/${data.value}/current.json`, {
@@ -88,6 +90,13 @@ const checkSelections = async () => {
             dispatch(setSenators(data.results))
             // console.log(data)
             dispatch(closeModal())
+        })
+
+        await fetch(`http://localhost:3005/statecapital?state=${homeState}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log('in getsstatecapital data: ', data)
+            dispatch(setStateCapital(data.capital))
         })
     }
     
