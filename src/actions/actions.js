@@ -64,3 +64,9 @@ export const closeStartModal = () => {
         type: 'CLOSE_START_MODAL'
     }
 }
+
+export const stopGame = () => {
+    return {
+        type: 'STARTED_GAME_FALSE'
+    }
+}

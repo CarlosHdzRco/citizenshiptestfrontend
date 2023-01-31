@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setExamInfo } from '../actions/actions';
 import { Segment, Button, Card, Icon } from 'semantic-ui-react'
 import '../css/Game.css'
-import { closeStartModal, openStartModal } from '../actions/actions'
+import { openStartModal } from '../actions/actions'
 import NextQuestionPortal from './NextQuestionPortal';
+import EndGameModal from './EndGameModal';
+import { stopGame } from '../actions/actions';
 
 
 function Game() {
@@ -21,57 +23,57 @@ function Game() {
   const [randAnswers, setRandAnswers] = useState([])              // holds answers both correct and wrong depending on type
   const [buttonSettings, setButtonSettings] = useState([{icon: '', disabled: false, active: false}, {icon: '', disabled: false, active: false},{icon: '', disabled: false, active: false},{icon: '', disabled: false, active: false}])
 
-  const [numClicks, setNumClicks] = useState(0)
-  const [isCorrect, setIsCorrect] = useState(true)
+  const [numClicks, setNumClicks] = useState(0)                   // holds number of guesses left on the question depending on type
+  const [isCorrect, setIsCorrect] = useState(true)                // if chosen answer is correct
 
-  const [openPortal, setOpenPortal] = useState(false)
+  const [openPortal, setOpenPortal] = useState(false)             // open state for Next question portal at bottom of screen
+  const [openRestartModal, setOpenRestartModal] = useState(false)             // open state to open restart modal
+
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log('game use effect')
     const apiCall = async () => {
       await fetch(`http://localhost:3005/`)
       .then(response => response.json())
       .then(data => {
-        // console.log(data)
         dispatch(setExamInfo(data))
-        setQandA(data)
+        setQandA(data, 0)                   // set initial first question
         setLoaded(true)
       })
     }
 
-    
-
+    // if game has not started then change startedGame state to true and open start modal
     if(startedGame === false) {
       dispatch(openStartModal())
     }
 
     apiCall()
     
-  }, [])
+  }, [dispatch])
   
 
 
   // get random numbers for random ten questions
-  const setQandA = (data) => {
-    let i = 0;
-    let j = 0
-    let randQuestionNumsArray = []
-    let randAnswerNumsArray = []
-
+  const setQandA = (data, index) => {
+    let i = 0;    //counter
+    let j = 0     // counter
+    let randQuestionNumsArray = []    // holds the ten random questions
+    let randAnswerNumsArray = []      // holds the random answers depending on the current index
 
     //get 10 random numbers between 0 and 99 
-    while(i<10 && startedGame == false) {
+    while(i<10 && startedGame === false) {
       let randNum = Math.floor(Math.random() * 100);
-      const result = randQuestionNumsArray.filter(num => num === randNum);
 
+      // make sure question is not already chosen
+      const result = randQuestionNumsArray.filter(num => num === randNum);
       if(result.length === 0) {
         randQuestionNumsArray = [...randQuestionNumsArray, randNum];
         i = i + 1;
       }
     }
 
+    // if game is already started then just get randQuestionsNums state instead of getting new random questions
     if(startedGame === true) {
       randQuestionNumsArray = randQuestionNums;
     }
@@ -79,185 +81,211 @@ function Game() {
     // get 4 random numbers between 0 and 3
     while(j<4) {
       let randNum = Math.floor(Math.random() * 4);
-      const result = randAnswerNumsArray.filter(num => num === randNum);
 
+      // make sure answer is not already chosen
+      const result = randAnswerNumsArray.filter(num => num === randNum);
       if(result.length === 0) {
         randAnswerNumsArray = [...randAnswerNumsArray, randNum];
         j = j + 1;
       }
-
     }
   
-    setRandQuestionNums(randQuestionNumsArray)
-    setRandAnswerNums(randAnswerNumsArray)
-    setNumClicks(data[randQuestionNumsArray[questionIndex]].type)
+    setRandQuestionNums(randQuestionNumsArray)            // set random question state with temporary random questions state
+    setRandAnswerNums(randAnswerNumsArray)                // set random answers state with temporary random answers state
+    setNumClicks(data[randQuestionNumsArray[index]].type) // set number of clicks(guesses) that the current question takes depending on type
 
     // question type is 1 so one correct answer is chosen and three wrong answers are chosen
-    if(data[randQuestionNumsArray[questionIndex]].type === 1) {
-      let randCorrectAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[questionIndex]].answer.length);
+    if(data[randQuestionNumsArray[index]].type === 1) {
 
-      let randWrongAnsHolder = []
-      let randWrongAnsNumHolder = []
-
+      let randCorrectAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[index]].answer.length);   // get a random correct answer
+      let randWrongAnsHolder = []       // holder for random wrong answers
+      let randWrongAnsNumHolder = []    // holder for random wrong answers numbers
       let k = 0;
 
+      // get three random wrong answers
       while(k < 3) {
-        let randWrongAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[questionIndex]].wrongAns.length);
-        // console.log('randWrongAnsNum: ', randWrongAnsNum)
-        const result = randWrongAnsNumHolder.filter(num => num === randWrongAnsNum);
-        // console.log('result: ', result)
+        let randWrongAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[index]].wrongAns.length);
 
+        // make sure wrong answer hasnt been chosen already
+        const result = randWrongAnsNumHolder.filter(num => num === randWrongAnsNum);
         if(result.length === 0) {
-          randWrongAnsHolder = [...randWrongAnsHolder, {answer: data[randQuestionNumsArray[questionIndex]].wrongAns[randWrongAnsNum], isCorrect: false}];
+          randWrongAnsHolder = [...randWrongAnsHolder, {answer: data[randQuestionNumsArray[index]].wrongAns[randWrongAnsNum], isCorrect: false}];
           randWrongAnsNumHolder = [...randWrongAnsNumHolder, randWrongAnsNum]
           k = k + 1;
         }
       }
 
-      setRandAnswers([{answer: data[randQuestionNumsArray[questionIndex]].answer[randCorrectAnsNum], isCorrect: true}, ...randWrongAnsHolder])
-
+      // add random answers to randanswers array state
+      setRandAnswers([{answer: data[randQuestionNumsArray[index]].answer[randCorrectAnsNum], isCorrect: true}, ...randWrongAnsHolder])
     }
 
     // question type is 2 so two correct answers are chosen and two wrong answers is chosen
-    else if(data[randQuestionNumsArray[questionIndex]].type === 2) {
+    else if(data[randQuestionNumsArray[index]].type === 2) {
 
-      let randWrongAnsHolder = []
-      let randCorrectAnsHolder = []
-      let randWrongAnsNumHolder = []
-      let randCorrectAnsNumHolder = []
-
+      let randWrongAnsHolder = []       // holder for random wrong answers
+      let randCorrectAnsHolder = []     // holder for random correct answers
+      let randWrongAnsNumHolder = []    // holder for random wrong answer numbers
+      let randCorrectAnsNumHolder = []  // holders for random correct answer numbers
       let k = 0;
       let l = 0;
 
+      // get two random correct answers
       while(k < 2) {
-        let randCorrectAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[questionIndex]].answer.length);
+        let randCorrectAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[index]].answer.length);
 
+        // make sure correct answer has not been chosen
         const result = randCorrectAnsNumHolder.filter(num => num === randCorrectAnsNum);
-
         if(result.length === 0) {
-          randCorrectAnsHolder = [...randCorrectAnsHolder, {answer: data[randQuestionNumsArray[questionIndex]].answer[randCorrectAnsNum], isCorrect: true}];
+          randCorrectAnsHolder = [...randCorrectAnsHolder, {answer: data[randQuestionNumsArray[index]].answer[randCorrectAnsNum], isCorrect: true}];
           randCorrectAnsNumHolder = [...randCorrectAnsNumHolder, randCorrectAnsNum]
-
           k = k + 1;
         }
       }
 
+      // get two random wrong answers
       while(l < 2) {
-        let randWrongAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[questionIndex]].wrongAns.length);
+        let randWrongAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[index]].wrongAns.length);
 
+        // make sure wrong answer has not been chosen
         const result = randWrongAnsNumHolder.filter(num => num === randWrongAnsNum);
-
         if(result.length === 0) {
-          randWrongAnsHolder = [...randWrongAnsHolder, {answer: data[randQuestionNumsArray[questionIndex]].wrongAns[randWrongAnsNum], isCorrect: false}];
+          randWrongAnsHolder = [...randWrongAnsHolder, {answer: data[randQuestionNumsArray[index]].wrongAns[randWrongAnsNum], isCorrect: false}];
           randWrongAnsNumHolder = [...randWrongAnsNumHolder, randWrongAnsNum]
-
           l = l + 1;
         }
       }
 
-      setRandAnswers([...randCorrectAnsHolder, ...randWrongAnsHolder])
-
+      setRandAnswers([...randCorrectAnsHolder, ...randWrongAnsHolder])  // add both correct and wrong answers to randanswers array state
     }
 
     // question type is 3 so three correct answers are chosen and 1 wrong answer is chosen
-    else if(data[randQuestionNumsArray[questionIndex]].type === 3) {
-      let randWrongAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[questionIndex]].wrongAns.length);
-
-      let randCorrectAnsHolder = []
-      let randCorrectAnsNumHolder = []
-
+    else if(data[randQuestionNumsArray[index]].type === 3) {
+      let randWrongAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[index]].wrongAns.length); // get random wrong answer
+      let randCorrectAnsHolder = []     // holder for correct answers
+      let randCorrectAnsNumHolder = []  // holder for correct answers num
       let k = 0;
 
+      // get three random correct answers
       while(k < 3) {
-        let randCorrectAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[questionIndex]].answer.length);
+        let randCorrectAnsNum = Math.floor(Math.random() * data[randQuestionNumsArray[index]].answer.length);
 
+        // make sure random correct answer has not been chosen yet
         const result = randCorrectAnsNumHolder.filter(num => num === randCorrectAnsNum);
-
         if(result.length === 0) {
-          randCorrectAnsHolder = [...randCorrectAnsHolder, {answer: data[randQuestionNumsArray[questionIndex]].answer[randCorrectAnsNum], isCorrect: true }];
+          randCorrectAnsHolder = [...randCorrectAnsHolder, {answer: data[randQuestionNumsArray[index]].answer[randCorrectAnsNum], isCorrect: true }];
           randCorrectAnsNumHolder = [...randCorrectAnsNumHolder, randCorrectAnsNum]
-
           k = k + 1;
         }
       }
 
-      setRandAnswers([...randCorrectAnsHolder, {answer: data[randQuestionNumsArray[questionIndex]].wrongAns[randWrongAnsNum], isCorrect: false}])
+      setRandAnswers([...randCorrectAnsHolder, {answer: data[randQuestionNumsArray[index]].wrongAns[randWrongAnsNum], isCorrect: false}])   // set randanswers array state with random answers
     }
 
   }
-
 
 
   // check if button(answer) that is clicked is correct
-  const checkAnswer = (num) => {
-    if(randAnswers[randAnswerNums[num]].isCorrect) {
-      let buttonSettingsTemp = buttonSettings.slice()
+  const checkAnswer = (num, e) => {
 
-      buttonSettingsTemp[num].icon = <Icon name='check' color='green'/>
-      buttonSettingsTemp[num].active=true
+    console.log(e)
+    console.log(e.target)
+    console.log(e.target.ariaPressed)
 
-      if(numClicks == 1) {
-        for(let i = 0;i<4;i++) {
-          if(buttonSettingsTemp[i].active === false) {
-            buttonSettingsTemp[i].disabled = true
+    // make sure button has not been pressed yet
+    if(e.target.ariaPressed == "false") {
+      // if correct answer is chosen
+      if(randAnswers[randAnswerNums[num]].isCorrect) {
+        let buttonSettingsTemp = buttonSettings.slice()
+
+        buttonSettingsTemp[num].icon = <Icon name='check' color='green'/> // add check icon
+        buttonSettingsTemp[num].active=true   // keep button active
+        // buttonSettingsTemp[num].disabled=true                               // set button to disabled
+
+        // if the number of guesses left is 1
+        if(numClicks === 1) {
+
+          // make any remaining buttons disabled so user can't select
+          for(let i = 0;i<4;i++) {
+            if(buttonSettingsTemp[i].active === false) {
+              buttonSettingsTemp[i].disabled = true
+            }
           }
+
+          // if isCorrect global state is true after all guesses for one question then add check(green) icon to correctwrong array state and add one to number that are correct
+          if(isCorrect === true) {
+            setCorrectWrongArray([...correctWrongArray, <Icon name='check' color='green'/>])
+            setNumCorrect(numCorrect + 1)
+          }
+
+          // if isCorrect global state is false after all guesses for one question then add times(red) icon to correctwrong array state
+          else if(isCorrect === false) {
+            setCorrectWrongArray([...correctWrongArray, <Icon name='times' color='red'/>])
+          }
+
+          setOpenPortal(true)   // open "Next Question" button
         }
 
-        if(isCorrect === true) {
-          setCorrectWrongArray([...correctWrongArray, <Icon name='check' color='green'/>])
-        }
-
-        else if(isCorrect === false) {
-          setCorrectWrongArray([...correctWrongArray, <Icon name='times' color='red'/>])
-        }
-
-        setOpenPortal(true)
+        setNumClicks(numClicks - 1)             // take one off of numClicks for number of guesses left
+        setButtonSettings(buttonSettingsTemp)
       }
 
+      // if wrong answer is chosen
+      else if(randAnswers[randAnswerNums[num]].isCorrect === false) {
+        let buttonSettingsTemp = buttonSettings.slice()
+        setIsCorrect(false)   // set isCorrect state to false 
 
-      // if(numClicks-1 === 0) {
+        buttonSettingsTemp[num].icon = <Icon name='times' color='red'/>   // set button icon to times(red)
+        buttonSettingsTemp[num].active=true                               // set button to active
+        // buttonSettingsTemp[num].disabled=true                               // set button to disabled
+
+
+        // if number of guesses left is 1
+        if(numClicks === 1) {
+          // make all other buttons disabled
+          for(let i = 0;i<4;i++) {
+            if(buttonSettingsTemp[i].active === false) {
+              buttonSettingsTemp[i].disabled = true
+            }
+          }
+          setCorrectWrongArray([...correctWrongArray, <Icon key={questionIndex} name='times' color='red'/>])    // add incorrect icon(red) to correctWrongArray state
         
-      // }
-      
-      setNumClicks(numClicks - 1)
-      setButtonSettings(buttonSettingsTemp)
-    }
+          setOpenPortal(true) // open "Next Question" portal
 
-    else if(randAnswers[randAnswerNums[num]].isCorrect === false) {
-      let buttonSettingsTemp = buttonSettings.slice()
-      setIsCorrect(false)
-
-      buttonSettingsTemp[num].icon = <Icon name='times' color='red'/>
-      buttonSettingsTemp[num].active=true
-      // buttonSettingsTemp[num].disabled=true
-
-      if(numClicks == 1) {
-        for(let i = 0;i<4;i++) {
-          if(buttonSettingsTemp[i].active === false) {
-            buttonSettingsTemp[i].disabled = true
-          }
         }
-        setCorrectWrongArray([...correctWrongArray, <Icon name='times' color='red'/>])
+
+        setNumClicks(numClicks - 1) // subtract one from number of clicks(guesses)
+
+        setButtonSettings(buttonSettingsTemp)   // set button setting including if disabled, active and icon
       }
-
-      setNumClicks(numClicks - 1)
-      if(numClicks === 0) {
-        setOpenPortal(true)
-      }
-
-      setOpenPortal(true)
-
-      setButtonSettings(buttonSettingsTemp)
     }
   }
 
+
+  // Called when Next Question button is pressed
   const nextQuestion = () => {
-    console.log('in next question')
+
+    // if questionIndex is less than 10 then reset certain states to default
+    if(questionIndex < 9) {
+      setOpenPortal(false)
+      setIsCorrect(true)
+      setQandA(examInfo, questionIndex + 1)
+      setQuestionIndex(questionIndex + 1)
+      setButtonSettings([{icon: '', disabled: false, active: false}, {icon: '', disabled: false, active: false},{icon: '', disabled: false, active: false},{icon: '', disabled: false, active: false}])
+    }
+    else {
+      setOpenRestartModal(true)
+    }
+  }
+
+  const resetStates = () => {
+    dispatch(stopGame())
+    setQuestionIndex(0)
     setOpenPortal(false)
     setIsCorrect(true)
-    setQuestionIndex(questionIndex + 1)
-    setQandA(examInfo)
+    setQandA(examInfo, 0)
     setButtonSettings([{icon: '', disabled: false, active: false}, {icon: '', disabled: false, active: false},{icon: '', disabled: false, active: false},{icon: '', disabled: false, active: false}])
+    setCorrectWrongArray([])
+    setNumCorrect(0)
   }
 
   if(loaded){
@@ -269,19 +297,20 @@ function Game() {
             <Card.Meta className='questionCounter' >Question {questionIndex + 1} of 10</Card.Meta>
             <Card.Header className='questionHeader'>{examInfo[randQuestionNums[questionIndex]].question}</Card.Header>
             
-            <Card.Description className='questionChecks' content= {correctWrongArray} />
+            <Card.Description className='questionChecks' content= {correctWrongArray} key={[Math.floor(Math.random()), randAnswers[randAnswerNums[0]].answer, randAnswers[randAnswerNums[1]].answer, randAnswers[randAnswerNums[2]].answer, randAnswers[randAnswerNums[3]].answer]} />
           </Card.Content>
         </Card>
 
         <Segment raised className='gameContainer'>
-        <Button className='gameButton' active={buttonSettings[0].active} disabled={buttonSettings[0].disabled} fluid basic color='blue' onClick={() => checkAnswer(0)}>{buttonSettings[0].icon} A. {randAnswers[randAnswerNums[0]].answer}</Button>
-        <Button className='gameButton' active={buttonSettings[1].active} disabled={buttonSettings[1].disabled} fluid basic color='blue' onClick={() => checkAnswer(1)}>{buttonSettings[1].icon} B. {randAnswers[randAnswerNums[1]].answer}</Button>
-        <Button className='gameButton' active={buttonSettings[2].active} disabled={buttonSettings[2].disabled} fluid basic color='blue' onClick={() => checkAnswer(2)}>{buttonSettings[2].icon} C. {randAnswers[randAnswerNums[2]].answer}</Button>
-        <Button className='gameButton' active={buttonSettings[3].active} disabled={buttonSettings[3].disabled} fluid basic color='blue' onClick={() => checkAnswer(3)}>{buttonSettings[3].icon} D. {randAnswers[randAnswerNums[3]].answer}</Button>
+        <Button className='gameButton' toggle active={buttonSettings[0].active} disabled={buttonSettings[0].disabled} fluid basic color='blue' onClick={(e) => checkAnswer(0, e)}>{buttonSettings[0].icon} A. {randAnswers[randAnswerNums[0]].answer}</Button>
+        <Button className='gameButton' toggle active={buttonSettings[1].active} disabled={buttonSettings[1].disabled} fluid basic color='blue' onClick={(e) => checkAnswer(1, e)}>{buttonSettings[1].icon} B. {randAnswers[randAnswerNums[1]].answer}</Button>
+        <Button className='gameButton' toggle active={buttonSettings[2].active} disabled={buttonSettings[2].disabled} fluid basic color='blue' onClick={(e) => checkAnswer(2, e)}>{buttonSettings[2].icon} C. {randAnswers[randAnswerNums[2]].answer}</Button>
+        <Button className='gameButton' toggle active={buttonSettings[3].active} disabled={buttonSettings[3].disabled} fluid basic color='blue' onClick={(e) => checkAnswer(3, e)}>{buttonSettings[3].icon} D. {randAnswers[randAnswerNums[3]].answer}</Button>
         </Segment>
 
         <NextQuestionPortal openPortal={openPortal} setOpenPortal={() => setOpenPortal()} nextQuestion={() => nextQuestion()}/>
 
+        <EndGameModal openRestartModal={openRestartModal} setOpenRestartModal={setOpenRestartModal} numCorrect={numCorrect} resetStates={resetStates}/>
       </div>
     )
   }

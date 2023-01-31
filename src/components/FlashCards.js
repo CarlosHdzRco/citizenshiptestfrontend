@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 // import { Card } from 'semantic-ui-react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setExamInfo } from '../actions/actions';
+import { setExamInfo, stopGame } from '../actions/actions';
 import { Button, Icon } from 'semantic-ui-react'
 import ReactFlipCard from 'reactjs-flip-card'
 import '../css/FlashCards.css'
@@ -48,6 +48,7 @@ function FlashCards() {
     }
 
     apiCall()
+    dispatch(stopGame())
     
   }, [category, subcategory])
   

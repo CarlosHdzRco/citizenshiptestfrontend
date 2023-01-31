@@ -109,6 +109,7 @@ function Dropdowns() {
   return (
     <div className='dropdowns'>
         <Dropdown
+            key='category'
             className='category'
             placeholder='Select Category'
             selection
@@ -119,6 +120,7 @@ function Dropdowns() {
         />
 
         <Dropdown
+            key='subcategory'
             className='subcategory'
             placeholder='Select Subcategory'
             selection

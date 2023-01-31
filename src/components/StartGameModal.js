@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button, Image, Modal } from 'semantic-ui-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeStartModal, openStartModal } from '../actions/actions'
 import checkandx from '../images/checkandx.jpeg'
-
 import '../css/StartGameModal.css'
 
 function StartGameModal() {
     const startModalOpen = useSelector((state) => state.startModalOpen)
+
 
     const dispatch = useDispatch()
 

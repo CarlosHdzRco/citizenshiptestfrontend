@@ -75,6 +75,12 @@ export const reducer = (state, action) => {
                 startModalOpen: false,
                 startedGame: true
             }
+        case 'STARTED_GAME_FALSE':
+            // console.log('closestartmodal')
+            return {
+                ...state,
+                startedGame: false
+        }
 
         default:
             return state;
