@@ -87,12 +87,13 @@ const checkSelections = async () => {
         })
         .then(response => response.json())
         .then(data => {
-            dispatch(setSenators(data.results))
+            console.log(data.results)
+            dispatch(setSenators([data.results[0].name, data.results[1].name]))
             // console.log(data)
             dispatch(closeModal())
         })
 
-        await fetch(`http://localhost:3005/statecapital?state=${homeState}`)
+        await fetch(`https://citizenshiptestapi.herokuapp.com/statecapital?state=${homeState}`)
           .then(response => response.json())
           .then(data => {
             console.log('in getsstatecapital data: ', data)

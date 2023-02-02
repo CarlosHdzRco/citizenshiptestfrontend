@@ -32,7 +32,7 @@ function Home() {
       
       <Card.Group itemsPerRow={3}>
         <Card color='red' image={Logo} />
-        <Card color='white' image={Logo} />
+        <Card image={Logo} />
         <Card color='blue' image={Logo} />
 
       </Card.Group>

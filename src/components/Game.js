@@ -7,6 +7,7 @@ import { openStartModal } from '../actions/actions'
 import NextQuestionPortal from './NextQuestionPortal';
 import EndGameModal from './EndGameModal';
 import { stopGame } from '../actions/actions';
+import { set } from 'lodash';
 
 function Game() {
 
@@ -33,11 +34,13 @@ function Game() {
   const [openPortal, setOpenPortal] = useState(false)             // open state for Next question portal at bottom of screen
   const [openRestartModal, setOpenRestartModal] = useState(false) // open state to open restart modal
 
+  const [counter, setCounter] = useState(0)
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     const apiCall = async () => {
-      await fetch(`http://localhost:3005/`)
+      await fetch(`https://citizenshiptestapi.herokuapp.com/`)
       .then(response => response.json())
       .then(data => {
         dispatch(setExamInfo(data))
@@ -121,7 +124,7 @@ function Game() {
       // get one of users senator if random question is "Who is one of your state's U.S. Senators now?"
       if(data[randQuestionNumsArray[index]].question === "Who is one of your state's U.S. Senators now?") {
         let randSenatorNum = Math.floor(Math.random() * 2);
-        setRandAnswers([{answer: senatorsObj[randSenatorNum].name, isCorrect: true}, ...randWrongAnsHolder])
+        setRandAnswers([{answer: senatorsObj[randSenatorNum], isCorrect: true}, ...randWrongAnsHolder])
       }
 
       // get users representative if random question is "Name your U.S. Representative."
@@ -265,7 +268,7 @@ function Game() {
               buttonSettingsTemp[i].disabled = true
             }
           }
-          setCorrectWrongArray([...correctWrongArray, <Icon key={questionIndex} name='times' color='red'/>])    // add incorrect icon(red) to correctWrongArray state
+          setCorrectWrongArray([...correctWrongArray, <Icon key={counter} name='times' color='red'/>])    // add incorrect icon(red) to correctWrongArray state
         
           setOpenPortal(true) // open "Next Question" portal
 
@@ -281,7 +284,7 @@ function Game() {
 
   // Called when Next Question button is pressed
   const nextQuestion = () => {
-
+    setCounter(counter + 1)
     // if questionIndex is less than 10 then reset certain states to default
     if(questionIndex < 9) {
       setOpenPortal(false)
@@ -315,7 +318,7 @@ function Game() {
             <Card.Meta className='questionCounter' >Question {questionIndex + 1} of 10</Card.Meta>
             <Card.Header className='questionHeader'>{examInfo[randQuestionNums[questionIndex]].question}</Card.Header>
             
-            <Card.Description className='questionChecks' content= {correctWrongArray} key={[Math.floor(Math.random()), randAnswers[randAnswerNums[0]].answer, Math.floor(Math.random()), randAnswers[randAnswerNums[1]].answer, randAnswers[randAnswerNums[2]].answer, randAnswers[randAnswerNums[3]].answer, Math.floor(Math.random())]} />
+            <Card.Description className='questionChecks' content= {correctWrongArray} key={counter} />
           </Card.Content>
         </Card>
 

@@ -16,6 +16,9 @@ function FlashCards() {
   const examInfo = useSelector((state) => state.examInfo)
   const category = useSelector((state) => state.category)
   const subcategory = useSelector((state) => state.subcategory)
+  const senatorsObj = useSelector((state) => state.senatorsObj)
+  const houseStr = useSelector((state) => state.houseStr)
+  const stateCapital = useSelector((state) => state.stateCapital)
 
   const dispatch = useDispatch();
 
@@ -27,6 +30,8 @@ function FlashCards() {
   const [isTranslated, setIsTranslated] = useState(false)
   const [cardFront, setCardFront] = useState('')
   const [cardBack, setCardBack] = useState('')
+  const [count, setCount] = useState(0)
+
 
 
 
@@ -37,12 +42,32 @@ function FlashCards() {
       await fetch(`http://localhost:3005?category=${category}&subcategory=${subcategory}`)
       .then(response => response.json())
       .then(data => {
+
+        if(data !== []) {
+          for(let i = 0;i<data.length;i++) {
+            console.log(data[i].question)
+            if(data[i].question === "Who is one of your state's U.S. Senators now?" && senatorsObj !== []) {
+              data[i].answer = senatorsObj
+              console.log('in if')
+            }
+            else if(data[i].question === "Name your U.S. Representative.") {
+              data[i].answer = [houseStr]
+            }
+            else if(data[i].question === "What is the capital of your state?") {
+              data[i].answer = [stateCapital]
+            }
+          }
+        }
+
         // console.log(data)
         dispatch(setExamInfo(data))
         setLoaded(true)
         setCurrentIndex(0)
         setCardFront(data[currentIndex].question)
-        setCardBack(data[currentIndex].answer)
+        setCardBack(data[currentIndex].answer.map(answer => {
+          return <p key={'apicall' + (Math.random() + Math.random() - Math.random() + Math.random())}> &#x2022; {answer}</p>
+        }))
+        setCount(count + 1)
 
       })
     }
@@ -50,17 +75,20 @@ function FlashCards() {
     apiCall()
     dispatch(stopGame())
     
-  }, [category, subcategory])
+  }, [category, subcategory, senatorsObj, houseStr, stateCapital])
   
   const leftClick = () => {
     setTransitionSpeed('0s')
     setIsFront(true)
 
     if(currentIndex !== 0) {
-      setCurrentIndex(currentIndex - 1)
-      setCardFront(examInfo[currentIndex].question)
-      setCardBack(examInfo[currentIndex].answer)
+      setCardFront(examInfo[currentIndex-1].question)
+      setCardBack(examInfo[currentIndex-1].answer.map(answer => {
+        return <p key={'leftclick' + (Math.random() + Math.random() - Math.random() + Math.random())}>&#x2022; {answer}</p>
+      }))
       setIsTranslated(false)
+      setCurrentIndex(currentIndex - 1)
+      setCount(count + 1)
 
     }
   }
@@ -71,9 +99,12 @@ function FlashCards() {
 
     if(currentIndex !== examInfo.length-1) {
       setCardFront(examInfo[currentIndex+1].question)
-      setCardBack(examInfo[currentIndex+1].answer)
+      setCardBack(examInfo[currentIndex+1].answer.map(answer => {
+        return <p key={'rightclick' + (Math.random() + Math.random() - Math.random() + Math.random())}>&#x2022; {answer}</p>
+      }))
       setIsTranslated(false)
       setCurrentIndex(currentIndex + 1)
+      setCount(count + 1)
 
     }
   }
@@ -119,12 +150,19 @@ function FlashCards() {
 
     if(isTranslated === true) {
       setCardFront(examInfo[currentIndex].question)
-      setCardBack(examInfo[currentIndex].answer)
+      setCardBack(examInfo[currentIndex].answer.map(answer => {
+        return <p key={'istranslated' + (Math.random() + Math.random() - Math.random() + Math.random())}>&#x2022; {answer}</p>
+      }))
+      setCount(count + 1)
       setIsTranslated(false)
     }
     else if (isTranslated === false) {
       setCardFront(examInfo[currentIndex].spanishQuestion)
-      setCardBack(examInfo[currentIndex].spanishAnswer)
+      setCardBack(examInfo[currentIndex].spanishAnswer.map(answer => {
+        return <p  key={'isnottranslated' + (Math.random() + Math.random() - Math.random() + Math.random())}>&#x2022; {answer}</p>
+      }))
+      setCount(count + 1)
+
       setIsTranslated(true)
     }
   }
@@ -139,16 +177,14 @@ function FlashCards() {
         <div className='contentContainer'>
           
           <Dropdowns />
-          {/* <h2>{category}</h2>
-          <h2>{subcategory}</h2> */}
           <div className='cardsoundtransContainer'>
             <div className='cardContainer'>
               <ReactFlipCard className='card'
                 containerStyle={{height: '450px', width: '650px'}}
                 frontStyle={styles.card}
                 backStyle={styles.card}
-                frontComponent={<div><h5 className='descriptor'>Question {currentIndex + 1} / {examInfo.length}</h5><h2 className='cardText'>{cardFront}</h2></div>}
-                backComponent={<div><h5 className='descriptor'>Answer {currentIndex + 1} / {examInfo.length}</h5><h2 className='cardText'>{cardBack}</h2></div>}
+                frontComponent={<div><h5 className='descriptor'>Question {currentIndex + 1} / {examInfo.length}</h5><h2 key='front' className='cardText'>{cardFront}</h2></div>}
+                backComponent={<div><h5 className='descriptor'>Answer {currentIndex + 1} / {examInfo.length}</h5><h2 key='back' className='cardText'>{cardBack}</h2></div>}
                 flipTrigger= 'onClick'
                 direction='vertical'
                 onClick={() => changeIsFront()}

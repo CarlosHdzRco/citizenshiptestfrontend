@@ -104,10 +104,10 @@ function EndGameModal({openRestartModal, setOpenRestartModal, numCorrect, resetS
                     </Modal.Content>
                     <Modal.Actions>
                         <Button onClick={() => handleRestartClick()} color='red'>
-                        <Icon key='redo' name='undo alternate' color='white'/> Restart Test
+                        <Icon key='redo' name='undo alternate'/> Restart Test
                         </Button>
                         <Button onClick={() => handleFlashCardsClick()} color='green'>
-                        <Icon key='redo' name='book' color='white'/> Go to Flashcards
+                        <Icon key='redo' name='book'/> Go to Flashcards
                         </Button>
                     </Modal.Actions>
                 </Modal>
