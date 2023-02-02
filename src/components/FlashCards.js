@@ -45,10 +45,10 @@ function FlashCards() {
 
         if(data !== []) {
           for(let i = 0;i<data.length;i++) {
-            console.log(data[i].question)
+            // console.log(data[i].question)
             if(data[i].question === "Who is one of your state's U.S. Senators now?" && senatorsObj !== []) {
               data[i].answer = senatorsObj
-              console.log('in if')
+              // console.log('in if')
             }
             else if(data[i].question === "Name your U.S. Representative.") {
               data[i].answer = [houseStr]
@@ -119,17 +119,34 @@ function FlashCards() {
       text = examInfo[currentIndex].answer;
     }
 
-    // const voices = window.speechSynthesis.getVoices();
-    // const enVoices = voices.filter(x => x.voiceURI === "Google US English");  
-    // enVoices.forEach(voice => {
-        // console.log(voice)
-        const msg = new SpeechSynthesisUtterance();
-        // msg.pitch = .5
-        msg.rate = .8
-        msg.text = text;
-        // msg.voice = voice
-        window.speechSynthesis.speak(msg);
-    // });
+    let voices = window.speechSynthesis.getVoices();
+    console.log(voices)
+
+    speechSynthesis.addEventListener("voiceschanged", () => {
+      voices = speechSynthesis.getVoices()
+      const enVoices = voices.filter(x => x.voiceURI === "Bells");
+      enVoices.forEach(voice => {
+          // console.log(voice)
+          const msg = new SpeechSynthesisUtterance();
+          // msg.pitch = .5
+          msg.rate = .8
+          msg.text = text;
+          msg.voice = voice
+          window.speechSynthesis.speak(msg);
+      });
+    })
+
+    const enVoices = voices.filter(x => x.voiceURI === "Susan");
+      enVoices.forEach(voice => {
+          // console.log(voice)
+          const msg = new SpeechSynthesisUtterance();
+          // msg.pitch = .5
+          msg.rate = .8
+          msg.text = text;
+          msg.voice = voice
+          window.speechSynthesis.speak(msg);
+      });
+    
 
   }
 
