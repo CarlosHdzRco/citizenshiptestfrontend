@@ -39,7 +39,7 @@ function FlashCards() {
 
     const apiCall = async () => {
       // console.log('in api call')
-      await fetch(`http://localhost:3005?category=${category}&subcategory=${subcategory}`)
+      await fetch(`https://citizenshiptestapi.herokuapp.com/?category=${category}&subcategory=${subcategory}`)
       .then(response => response.json())
       .then(data => {
 
