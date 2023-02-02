@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     background-color: #1C3879;
-    padding-top: 30px;
+    padding-top: 120px;
 }
 
 .cardContainer {
@@ -16,7 +16,7 @@
 
 .buttons {
     margin-top: 20px;
-    margin-bottom: 100px;;
+    margin-bottom: 100px;
 }
 
 .soundImg {

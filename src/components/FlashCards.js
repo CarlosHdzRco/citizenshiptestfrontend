@@ -119,17 +119,17 @@ function FlashCards() {
       text = examInfo[currentIndex].answer;
     }
 
-    const voices = window.speechSynthesis.getVoices();
-    const enVoices = voices.filter(x => x.voiceURI === "Google US English");  
-    enVoices.forEach(voice => {
+    // const voices = window.speechSynthesis.getVoices();
+    // const enVoices = voices.filter(x => x.voiceURI === "Google US English");  
+    // enVoices.forEach(voice => {
         // console.log(voice)
         const msg = new SpeechSynthesisUtterance();
         // msg.pitch = .5
         msg.rate = .8
         msg.text = text;
-        msg.voice = voice
+        // msg.voice = voice
         window.speechSynthesis.speak(msg);
-    });
+    // });
 
   }
 
