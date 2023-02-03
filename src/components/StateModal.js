@@ -39,8 +39,6 @@ function StateModal() {
   }, [])
 
   const fillDistrictOptions = async (data) => {
-    // console.log('in apicalls func')
-    console.log(data.value)
     dispatch(setHomeState(data.value))
     
     await fetch(`https://api.propublica.org/congress/v1/members/house/${data.value}/current.json`, {
@@ -51,7 +49,6 @@ function StateModal() {
     })
     .then(response => response.json())
     .then(data => {
-        // console.log(data.results)
 
         var districtOptionsVar = data.results.map((resultsObj) => {
             return {key: 'District ' + resultsObj.district + ':  ' + resultsObj.name, text: 'District ' + resultsObj.district + ':  ' + resultsObj.name, value: 'District ' + resultsObj.district + ':  ' + resultsObj.name}
@@ -87,16 +84,13 @@ const checkSelections = async () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data.results)
             dispatch(setSenators([data.results[0].name, data.results[1].name]))
-            // console.log(data)
             dispatch(closeModal())
         })
 
         await fetch(`https://citizenshiptestapi.herokuapp.com/statecapital?state=${homeState}`)
           .then(response => response.json())
           .then(data => {
-            console.log('in getsstatecapital data: ', data)
             dispatch(setStateCapital(data.capital))
         })
     }

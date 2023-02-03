@@ -113,12 +113,10 @@ function FlashCards() {
     }
 
     let voices = window.speechSynthesis.getVoices();
-    let englishVoices = voices.filter(x => x.lang === "en-US");
 
     findVoice(voices, text)
 
     speechSynthesis.addEventListener("voiceschanged", () => {
-      voices = speechSynthesis.getVoices()
       findVoice(voices, text)
     })
 
@@ -133,6 +131,7 @@ function FlashCards() {
     const googleVoice = voices.filter(x => x.voiceURI === "Google US English");
     const samanthaVoice = voices.filter(x => x.name === "Samantha");
     if(googleVoice.length == 1) {
+      console.log('1')
       googleVoice.forEach(voice => {
         const msg = new SpeechSynthesisUtterance();
         msg.rate = .8
@@ -143,6 +142,7 @@ function FlashCards() {
     }
 
     else if (samanthaVoice.length == 1) {
+      console.log('2')
       samanthaVoice.forEach(voice => {
         const msg = new SpeechSynthesisUtterance();
         msg.pitch = 1.2
@@ -154,6 +154,7 @@ function FlashCards() {
     }
 
     else {
+      console.log('3')
       const msg = new SpeechSynthesisUtterance();
       msg.pitch = 1.2
       msg.rate = .72
