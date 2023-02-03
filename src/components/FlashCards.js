@@ -210,7 +210,7 @@ function FlashCards() {
           <div className='cardsoundtransContainer'>
             <div className='cardContainer'>
               <ReactFlipCard className='card'
-                containerStyle={{height: '450px', width: '650px'}}
+                containerCss='cardContainerCss'
                 frontStyle={styles.card}
                 backStyle={styles.card}
                 frontComponent={<div><h5 className='descriptor'>Question {currentIndex + 1} / {examInfo.length}</h5><h2 key='front' className='cardText'>{cardFront}</h2></div>}

@@ -23,7 +23,7 @@ function Navbar({children}) {
     const dispatch = useDispatch()
   return (
     <>
-        <Menu secondary>
+        <Menu secondary stackable>
             <Menu.Item as={Link} to='/'
             name='Home'
             active={activeItem === 'Home'}

@@ -10,13 +10,24 @@
     display: flex;
 }
 
-.card {
-    width: 300px;
+.cardContainerCss {
+    height: 450px;
+    width: 650px;
 }
 
 .buttons {
     margin-top: 20px;
     margin-bottom: 100px;
+}
+
+.ui.button.translateButton {
+    font-family: 'Roboto', sans-serif;
+    border-radius: 5px;
+    margin-top: 3px;
+}
+
+.ui.button.soundButton {
+    
 }
 
 .soundImg {
@@ -57,18 +68,64 @@ h5 {
     flex-direction: column;
 }
 
-.translateButton {
-    font-family: 'Roboto', sans-serif;
-    /* background-image: linear-gradient( 135deg, #607EAA 10%, #EAE3D2 100%); */
-    border-radius: 5px;
-    margin-top: 3px !important;
-
-}
-
 .ui.button {
     padding: .4em !important;
 }
 
 .voiceColor {
     color: white;
+}
+
+@media screen and (max-width: 800px) {
+    .contentContainer {
+        /* background-color: red; */
+    }
+    .cardContainerCss {
+        width: 400px;
+    }
+
+    .cardText {
+        font-size: larger;
+    }
+
+    .ui.button.translateButton {
+        font-size: medium !important;
+    }
+    
+    .ui.button.soundButton {
+        font-size: medium !important;
+    }
+    
+}
+
+@media screen and (min-width: 800px) and (max-width: 900px) {
+    .contentContainer {
+        /* background-color: blue; */
+    }
+    .cardContainerCss {
+        width: 550px;
+    }
+
+    .cardText {
+    }
+    
+    
+}
+
+@media screen and (min-width: 900px) and (max-width: 1136px) {
+    .contentContainer {
+        /* background-color: gray; */
+    }
+}
+
+@media screen and (min-width: 1136px) and (max-width: 1600px) {
+    .contentContainer {
+        /* background-color: purple; */
+    }
+}
+
+@media screen and (min-width: 1136px) {
+    .contentContainer {
+        /* background-color: beige; */
+    }
 }
