@@ -120,11 +120,13 @@ function FlashCards() {
     }
 
     let voices = window.speechSynthesis.getVoices();
-    console.log(voices)
+    let englishVoices = voices.filter(x => x.lang === "en-US");
+
+    console.log(englishVoices)
 
     speechSynthesis.addEventListener("voiceschanged", () => {
       voices = speechSynthesis.getVoices()
-      const enVoices = voices.filter(x => x.voiceURI === "Bells");
+      const enVoices = voices.filter(x => x.voiceURI === "Albert");
       enVoices.forEach(voice => {
           // console.log(voice)
           const msg = new SpeechSynthesisUtterance();
@@ -136,7 +138,7 @@ function FlashCards() {
       });
     })
 
-    const enVoices = voices.filter(x => x.voiceURI === "Susan");
+    const enVoices = voices.filter(x => x.voiceURI === "urn:moz-tts:osx:com.apple.voice.compact.en-US.Samantha");
       enVoices.forEach(voice => {
           // console.log(voice)
           const msg = new SpeechSynthesisUtterance();
