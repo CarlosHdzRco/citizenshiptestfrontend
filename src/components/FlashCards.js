@@ -114,12 +114,14 @@ function FlashCards() {
 
     let voices = window.speechSynthesis.getVoices();
 
-    findVoice(voices, text)
 
     speechSynthesis.addEventListener("voiceschanged", () => {
       findVoice(voices, text)
     })
 
+    if(voices.length != 0) {
+      findVoice(voices, text)
+    }
 
     
 
@@ -145,8 +147,8 @@ function FlashCards() {
       console.log('2')
       samanthaVoice.forEach(voice => {
         const msg = new SpeechSynthesisUtterance();
-        msg.pitch = 1.2
-        msg.rate = .72
+        msg.pitch = 1
+        msg.rate = .76
         msg.text = text;
         msg.voice = voice
         window.speechSynthesis.speak(msg);
@@ -154,10 +156,9 @@ function FlashCards() {
     }
 
     else {
-      console.log('3')
       const msg = new SpeechSynthesisUtterance();
-      msg.pitch = 1.2
-      msg.rate = .72
+      msg.pitch = 1.35
+      msg.rate = .75
       msg.text = text;
       window.speechSynthesis.speak(msg);
     }
