@@ -81,19 +81,19 @@ h5 {
         /* background-color: red; */
     }
     .cardContainerCss {
-        width: 400px;
+        width: 300px;
     }
 
     .cardText {
-        font-size: larger;
+        font-size: medium;
     }
 
     .ui.button.translateButton {
-        font-size: medium !important;
+        font-size:smaller !important;
     }
     
     .ui.button.soundButton {
-        font-size: medium !important;
+        font-size: smaller !important;
     }
     
 }
