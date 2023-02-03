@@ -32,7 +32,7 @@
 }
 
 .descriptor {
-    position: fixed;
+    position:absolute;
     left: 30px;
     top: 30px;
 }
@@ -68,9 +68,6 @@ h5 {
 }
 
 @media screen and (max-width: 800px) {
-    .contentContainer {
-        /* background-color: red; */
-    }
     .cardContainerCss {
         width: 300px;
     }
@@ -112,33 +109,7 @@ h5 {
 }
 
 @media screen and (min-width: 800px) and (max-width: 900px) {
-    .contentContainer {
-        /* background-color: blue; */
-    }
     .cardContainerCss {
         width: 550px;
-    }
-
-    .cardText {
-    }
-    
-    
-}
-
-@media screen and (min-width: 900px) and (max-width: 1136px) {
-    .contentContainer {
-        /* background-color: gray; */
-    }
-}
-
-@media screen and (min-width: 1136px) and (max-width: 1600px) {
-    .contentContainer {
-        /* background-color: purple; */
-    }
-}
-
-@media screen and (min-width: 1136px) {
-    .contentContainer {
-        /* background-color: beige; */
-    }
+    }    
 }
