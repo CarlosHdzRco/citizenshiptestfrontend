@@ -114,7 +114,6 @@ function FlashCards() {
 
     let voices = window.speechSynthesis.getVoices();
 
-
     speechSynthesis.addEventListener("voiceschanged", () => {
       findVoice(voices, text)
     })
@@ -147,8 +146,8 @@ function FlashCards() {
       console.log('2')
       samanthaVoice.forEach(voice => {
         const msg = new SpeechSynthesisUtterance();
-        msg.pitch = 1
-        msg.rate = .76
+        msg.pitch = 1.15
+        msg.rate = .8
         msg.text = text;
         msg.voice = voice
         window.speechSynthesis.speak(msg);
