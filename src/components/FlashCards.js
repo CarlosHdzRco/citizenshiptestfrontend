@@ -31,25 +31,18 @@ function FlashCards() {
   const [cardFront, setCardFront] = useState('')
   const [cardBack, setCardBack] = useState('')
   const [count, setCount] = useState(0)
-  const [voicesTemp, setVoicesTemp] = useState([])
-
-
-
 
   useEffect(() => {
 
     const apiCall = async () => {
-      // console.log('in api call')
       await fetch(`https://citizenshiptestapi.herokuapp.com/?category=${category}&subcategory=${subcategory}`)
       .then(response => response.json())
       .then(data => {
 
         if(data !== []) {
           for(let i = 0;i<data.length;i++) {
-            // console.log(data[i].question)
             if(data[i].question === "Who is one of your state's U.S. Senators now?" && senatorsObj !== []) {
               data[i].answer = senatorsObj
-              // console.log('in if')
             }
             else if(data[i].question === "Name your U.S. Representative.") {
               data[i].answer = [houseStr]
@@ -60,7 +53,6 @@ function FlashCards() {
           }
         }
 
-        // console.log(data)
         dispatch(setExamInfo(data))
         setLoaded(true)
         setCurrentIndex(0)
@@ -123,35 +115,51 @@ function FlashCards() {
     let voices = window.speechSynthesis.getVoices();
     let englishVoices = voices.filter(x => x.lang === "en-US");
 
-    console.log(englishVoices)
-    setVoicesTemp(englishVoices)
+    findVoice(voices, text)
 
     speechSynthesis.addEventListener("voiceschanged", () => {
       voices = speechSynthesis.getVoices()
-      const enVoices = voices.filter(x => x.voiceURI === "Albert");
-      enVoices.forEach(voice => {
-          // console.log(voice)
-          const msg = new SpeechSynthesisUtterance();
-          // msg.pitch = .5
-          msg.rate = .8
-          msg.text = text;
-          msg.voice = voice
-          window.speechSynthesis.speak(msg);
-      });
+      findVoice(voices, text)
     })
 
-    const enVoices = voices.filter(x => x.voiceURI === "urn:moz-tts:osx:com.apple.voice.compact.en-US.Samantha");
-      enVoices.forEach(voice => {
-          // console.log(voice)
-          const msg = new SpeechSynthesisUtterance();
-          // msg.pitch = .5
-          msg.rate = .8
-          msg.text = text;
-          msg.voice = voice
-          window.speechSynthesis.speak(msg);
-      });
+
     
 
+  }
+
+  const findVoice = (voices, text) => {
+    
+    
+    const googleVoice = voices.filter(x => x.voiceURI === "Google US English");
+    const samanthaVoice = voices.filter(x => x.name === "Samantha");
+    if(googleVoice.length == 1) {
+      googleVoice.forEach(voice => {
+        const msg = new SpeechSynthesisUtterance();
+        msg.rate = .8
+        msg.text = text;
+        msg.voice = voice
+        window.speechSynthesis.speak(msg);
+      });
+    }
+
+    else if (samanthaVoice.length == 1) {
+      samanthaVoice.forEach(voice => {
+        const msg = new SpeechSynthesisUtterance();
+        msg.pitch = 1.2
+        msg.rate = .72
+        msg.text = text;
+        msg.voice = voice
+        window.speechSynthesis.speak(msg);
+      });
+    }
+
+    else {
+      const msg = new SpeechSynthesisUtterance();
+      msg.pitch = 1.2
+      msg.rate = .72
+      msg.text = text;
+      window.speechSynthesis.speak(msg);
+    }
   }
 
   const changeIsFront = () => {
@@ -196,12 +204,6 @@ function FlashCards() {
       <>
         
         <div className='contentContainer'>
-
-          <ul>
-            {voicesTemp.map((voice) => {
-              return <li className='voiceColor'>{voice.name}</li>
-            })}
-          </ul>
           
           <Dropdowns />
           <div className='cardsoundtransContainer'>
