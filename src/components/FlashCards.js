@@ -235,8 +235,8 @@ function FlashCards() {
           
 
           <div className='buttons'>
-            <Button content='Prev' icon='left arrow' labelPosition='left' onClick={()=> leftClick()} />
-            <Button content='Next' icon='right arrow' labelPosition='right' onClick={()=> rightClick()} />
+            <Button id='prevButton' content='Prev' icon='left arrow' labelPosition='left' onClick={()=> leftClick()} />
+            <Button id='nextButton' content='Next' icon='right arrow' labelPosition='right' onClick={()=> rightClick()} />
           </div>
           
         </div>

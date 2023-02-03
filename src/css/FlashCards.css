@@ -26,16 +26,6 @@
     margin-top: 3px;
 }
 
-.ui.button.soundButton {
-    
-}
-
-.soundImg {
-    height: 20px;
-    width: 20px;
-    background-color: white;
-}
-
 .soundButton {
     background-color: white;
     border-radius: 5px;
@@ -70,6 +60,7 @@ h5 {
 
 .ui.button {
     padding: .4em !important;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 .voiceColor {
@@ -89,13 +80,35 @@ h5 {
     }
 
     .ui.button.translateButton {
-        font-size:smaller !important;
+        font-size:small !important;
     }
     
     .ui.button.soundButton {
-        font-size: smaller !important;
+        font-size: small !important;
     }
-    
+
+    .cardsoundtransContainer {
+        display: initial;
+        padding-left: 0px;
+    }
+
+    .soundtransContainer {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+    }
+
+    .ui.button.translateButton {
+        margin-top: 0px;
+    }
+
+    #nextButton {
+        font-size: medium !important;
+    }
+
+    #prevButton {
+        font-size: medium !important;
+    }
 }
 
 @media screen and (min-width: 800px) and (max-width: 900px) {
