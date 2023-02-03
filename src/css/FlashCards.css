@@ -68,3 +68,7 @@ h5 {
 .ui.button {
     padding: .4em !important;
 }
+
+.voiceColor {
+    color: white;
+}

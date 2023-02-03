@@ -31,6 +31,7 @@ function FlashCards() {
   const [cardFront, setCardFront] = useState('')
   const [cardBack, setCardBack] = useState('')
   const [count, setCount] = useState(0)
+  const [voicesTemp, setVoicesTemp] = useState([])
 
 
 
@@ -123,6 +124,7 @@ function FlashCards() {
     let englishVoices = voices.filter(x => x.lang === "en-US");
 
     console.log(englishVoices)
+    setVoicesTemp(englishVoices)
 
     speechSynthesis.addEventListener("voiceschanged", () => {
       voices = speechSynthesis.getVoices()
@@ -194,6 +196,12 @@ function FlashCards() {
       <>
         
         <div className='contentContainer'>
+
+          <ul>
+            {voicesTemp.map((voice) => {
+              return <li className='voiceColor'>{voice.name}</li>
+            })}
+          </ul>
           
           <Dropdowns />
           <div className='cardsoundtransContainer'>
