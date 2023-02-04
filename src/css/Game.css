@@ -44,6 +44,10 @@
     font-family: 'Roboto', sans-serif !important;
 }
 
+.questionChecks {
+    height: 20px;
+}
+
 .ui.basic.blue.button {
     background-color: white !important;
 }
@@ -75,18 +79,22 @@
     }
 
     .gameContainer {
-        width: 400px;
+        width: 300px;
     }
 
     .questionCard {
-        width: 400px !important;
-        font-size: 1rem !important;
+        width: 300px !important;
+        font-size: .9rem !important;
 
     }
 
     .ui.button {
-        font-size: 1rem !important;
+        font-size: .9rem !important;
         font-family: 'Roboto', sans-serif;
+    }
+
+    .questionHeader {
+        height: 50px;
     }
 }
 
@@ -102,6 +110,10 @@
         /* background-color: yellow; */
         padding-top: 0px;
         margin-top: 20px;
+    }
+    .ui.button.gameButton {
+        margin-bottom: 20px;
+        height: 60px;
     }
 
 }
