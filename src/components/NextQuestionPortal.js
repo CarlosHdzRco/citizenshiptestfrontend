@@ -1,20 +1,13 @@
 import React from 'react'
 import { Segment, Portal, Button, Header } from 'semantic-ui-react'
+import '../css/NextQuestionPortal.css'
 
-function NextQuestionPortal({openPortal, setOpenPortal, nextQuestion}) {
+function NextQuestionPortal({openPortal, nextQuestion}) {
   return (
     <div>
         <Portal open={openPortal}>              
-            <Button positive
-            style={{
-                left: '50%',
-                transform: 'translateX(-50%)',
-                position: 'fixed',
-                top: '90%',
-                // zIndex: 1000,
-                height: '70px',
-                width: '550px'
-            }} 
+            <Button className='nextButton' positive
+            
             content='Next Question'
             onClick={() => nextQuestion()}
             />

@@ -1,4 +1,20 @@
-.portalContainer {
+/* .portalContainer {
     display: flex;
     justify-content: center;
+} */
+
+.ui.button.nextButton {
+    left: 50%;
+    transform: translateX(-50%);
+    position: fixed;
+    top: 90%;
+    height: 70px;
+    width: 550px;
+}
+
+@media screen and (max-width: 800px) {
+    .ui.button.nextButton {
+        width: 400px;
+        height: 50px;
+    }
 }

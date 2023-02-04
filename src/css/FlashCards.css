@@ -8,6 +8,7 @@
 
 .cardContainer {
     display: flex;
+    cursor: pointer;
 }
 
 .cardContainerCss {
@@ -70,6 +71,7 @@ h5 {
 @media screen and (max-width: 800px) {
     .cardContainerCss {
         width: 300px;
+        height: 400px;
     }
 
     .cardText {
@@ -116,7 +118,6 @@ h5 {
 
 @media screen and (max-height: 800px) {
     .contentContainer {
-        /* background-color: red; */
         padding-top: 40px;
     }
 
@@ -125,8 +126,12 @@ h5 {
     }
 }
 
-@media screen and (min-width: 800px) and (max-width: 900px) {
-    .cardContainerCss {
-        width: 550px;
-    }    
+@media screen and (min-height: 1100px) {
+    .contentContainer {
+        padding-top: 250px;
+    }
+
+    .buttons {
+        margin-bottom: 0px;
+    }
 }
