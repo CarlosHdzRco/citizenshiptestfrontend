@@ -7,7 +7,6 @@ import { openStartModal } from '../actions/actions'
 import NextQuestionPortal from './NextQuestionPortal';
 import EndGameModal from './EndGameModal';
 import { stopGame } from '../actions/actions';
-import { set } from 'lodash';
 
 function Game() {
 
