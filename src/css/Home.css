@@ -51,7 +51,6 @@
 
 @media screen and (min-width: 1300px) and (max-width: 1700px) {
     .homeContainer {
-        background-color: yellow;
         margin-top: 100px;
     }
     
@@ -154,7 +153,6 @@
 @media screen and (max-width: 800px) {
     .homeContainer {
         flex-direction: column;
-        /* background-color: red; */
         margin-top: 30px;
         width: 90%;
         justify-content: center;
